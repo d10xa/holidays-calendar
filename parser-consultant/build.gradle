@@ -1,0 +1,22 @@
+apply plugin: "groovy"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:2.4.7"
+    compile "org.gebish:geb-core:1.0"
+    compile "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+    compile "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
+    compile "com.codeborne:phantomjsdriver:1.3.0"
+}
+
+task fatJar(type: Jar) {
+    baseName = "$project.name-all"
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+    manifest {
+        attributes 'Main-Class': 'ru.d10xa.holidayconsultant.Main'
+    }
+}
