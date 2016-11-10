@@ -1,0 +1,5 @@
+task mergeJson << {
+    println file("json")
+        .listFiles()
+        .collect{it.name}
+}

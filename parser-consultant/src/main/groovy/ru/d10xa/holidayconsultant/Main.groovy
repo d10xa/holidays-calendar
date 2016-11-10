@@ -43,7 +43,9 @@ class Main {
 
         def table = browser.$("table.calendar-table")
 
-        def holidays = table.$("td.holiday").collect {
+        browser.waitFor {table.$("td.weekend").size() > 100}
+
+        def holidays = table.$("td.weekend").collect {
             def mStr = it.parent().parent().previous().$(".month").text()
             def m = Integer.valueOf(MONTHS.indexOf(mStr)) + 1
             def d = Integer.valueOf(it.text())

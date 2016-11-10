@@ -42,6 +42,8 @@ class Main {
 
         browser.go url
 
+        browser.waitFor {browser.$("div.MonthsList_holiday").size() > 100}
+
         def holidays = dates(browser.$("div.MonthsList_holiday"), year)
         def preholidays = dates(browser.$("div.MonthsList_preholiday"), year)
 
