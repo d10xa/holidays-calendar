@@ -34,7 +34,7 @@ class Main {
         println "output json: $outputJson"
         def outputFile = new File(outputJson)
 
-        assert outputFile.parentFile.exists()
+        assert outputFile.parentFile.isDirectory()
 
         WebDriver driver = new PhantomJSDriver()
         def browser = new Browser(driver: driver)

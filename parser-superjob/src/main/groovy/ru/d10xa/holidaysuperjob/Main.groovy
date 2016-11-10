@@ -34,6 +34,9 @@ class Main {
         println "url: $url"
         println "output json: $outputJson"
 
+        def outputFile = new File(outputJson)
+
+        assert outputFile.parentFile.isDirectory()
         WebDriver driver = new PhantomJSDriver()
         def browser = new Browser(driver: driver)
 
@@ -54,7 +57,7 @@ class Main {
             "preholidays": preholidays.collect{it.toString()}
         ])
 
-        new File(outputJson).text = JsonOutput.prettyPrint(json)
+        outputFile.text = JsonOutput.prettyPrint(json)
     }
 
     static List<LocalDate> dates(Navigator navigator, int year) {
