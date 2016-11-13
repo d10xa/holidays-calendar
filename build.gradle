@@ -1,5 +1,48 @@
-task mergeJson << {
-    println file("json")
-        .listFiles()
-        .collect{it.name}
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+import java.time.LocalDate
+
+class MergeHolidaysJsonTask extends DefaultTask {
+
+    @InputDirectory
+    File inputDir
+
+    @OutputFile
+    File output
+
+    String exclude = ""
+
+    @TaskAction
+    def action() {
+        TreeSet<LocalDate> holidays = new TreeSet()
+        TreeSet<LocalDate> preholidays = new TreeSet()
+
+        inputDir
+            .listFiles()
+            .findAll { File f -> f.name != exclude}
+            .findAll { File f -> f.name.toLowerCase().endsWith(".json")}
+            .collect { new JsonSlurper().parse(it) }
+            .each {
+                it['holidays']
+                    .collect { String str -> LocalDate.parse(str) }
+                    .each { holidays.add(it as LocalDate) }
+                it['preholidays']
+                    .collect { String str -> LocalDate.parse(str) }
+                    .each { preholidays.add(it as LocalDate) }
+        }
+        def json = JsonOutput.toJson(
+            [
+                'holidays'   : holidays.collect { it.toString() },
+                'preholidays': preholidays.collect { it.toString() }
+            ]
+        )
+        output.text = JsonOutput.prettyPrint(json)
+    }
+}
+
+task mergeJson(type: MergeHolidaysJsonTask) {
+    inputDir = file("json")
+    exclude = "calendar.json"
+    output = file("json/calendar.json")
 }
