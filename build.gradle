@@ -46,3 +46,25 @@ task mergeJson(type: MergeHolidaysJsonTask) {
     exclude = "calendar.json"
     output = file("json/calendar.json")
 }
+
+task compareCalendars
+compareCalendars.doLast {
+    List<Integer> years = new File("$projectDir/json")
+        .list()
+        .collect { it.find(/\d+/)?.toInteger() }
+        .findAll { it != null }
+        .unique()
+
+    years.forEach { y ->
+        def f1 = new File("$projectDir/json/superjob${y}.json")
+        def f2 = new File("$projectDir/json/consultant${y}.json")
+        if (!f1.isFile()) {
+            println("${f1.name} not exists")
+        } else if (!f2.isFile()) {
+            println("${f2.name} not exists")
+        } else {
+            println("$y eq ${f1.text == f2.text}")
+        }
+    }
+
+}

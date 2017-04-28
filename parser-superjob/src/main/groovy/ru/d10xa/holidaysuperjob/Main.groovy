@@ -44,8 +44,17 @@ class Main {
 
         browser.waitFor {browser.$("div.MonthsList_holiday").size() > 100}
 
-        def holidays = dates(browser.$("div.MonthsList_holiday"), year)
-        def preholidays = dates(browser.$("div.MonthsList_preholiday"), year)
+        def daysCountInYear = browser.$(".MonthsList_quarter")
+            .$("div.MonthsList_date:not(.h_color_gray):not(.m_outholiday)")
+            .size()
+        if(daysCountInYear != 365  && daysCountInYear != 364) {
+            throw new RuntimeException("days count in year $daysCountInYear")
+        }
+
+        def holidays = dates(browser
+            .$("div.MonthsList_date.MonthsList_holiday:not(.h_color_gray):not(.m_outholiday)"), year)
+        def preholidays = dates(browser
+            .$("div.MonthsList_date.MonthsList_preholiday:not(.h_color_gray):not(.m_outholiday)"), year)
 
         browser.quit()
 
@@ -64,9 +73,9 @@ class Main {
 
     static List<LocalDate> dates(Navigator navigator, int year) {
         navigator.collect { div ->
-            def mStr = div.parent().parent().previous().text()
+            def mStr = div.parent().parent().previous().getAttribute("innerText")
             def m = Integer.valueOf(MONTHS.indexOf(mStr)) + 1
-            def d = Integer.valueOf(div.text())
+            def d = Integer.valueOf(div.getAttribute("innerText").find( /\d+/ ).toInteger())
             LocalDate.of(year, m, d)
         }
     }

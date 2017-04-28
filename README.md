@@ -11,6 +11,7 @@
 [2015](json/superjob2015.json) 
 [2016](json/superjob2016.json) 
 [2017](json/superjob2017.json) 
+[2018](json/superjob2018.json) 
 
 ## consultant
 
@@ -21,6 +22,7 @@
 [2015](json/consultant2015.json) 
 [2016](json/consultant2016.json) 
 [2017](json/consultant2017.json)
+[2018](json/consultant2018.json)
 
 ## json structure
 
@@ -36,4 +38,16 @@
         "2017-11-03"
     ]
 }
+```
+
+## Gradle task
+
+```gradle
+task downloadCalendar
+downloadCalendar.doLast {
+    def f = file("$projectDir/src/main/resources/calendar.json")
+    new URL('https://raw.githubusercontent.com/d10xa/holidays-calendar/master/json/calendar.json')
+        .withInputStream { i -> f.withOutputStream { it << i } }
+}
+
 ```
