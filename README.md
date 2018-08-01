@@ -12,6 +12,7 @@
 [2016](json/superjob2016.json) 
 [2017](json/superjob2017.json) 
 [2018](json/superjob2018.json) 
+[2019](json/superjob2019.json) 
 
 ## consultant
 
@@ -23,6 +24,7 @@
 [2016](json/consultant2016.json) 
 [2017](json/consultant2017.json)
 [2018](json/consultant2018.json)
+[2019](json/consultant2019.json)
 
 ## json structure
 
@@ -40,6 +42,12 @@
 }
 ```
 
+## curl
+
+```
+curl -o src/main/resources/calendar.json https://raw.githubusercontent.com/d10xa/holidays-calendar/master/json/calendar.json
+```
+
 ## Gradle task
 
 ```gradle
@@ -51,3 +59,27 @@ downloadCalendar.doLast {
 }
 
 ```
+
+## Использование парсеров
+
+Исходный код страниц можно взять из браузера. Пример прямых ссылок для chrome:
+
+    view-source:https://www.superjob.ru/proizvodstvennyj_kalendar/2019/
+    view-source:https://www.consultant.ru/law/ref/calendar/proizvodstvennye/2019/
+
+Как альтернативный вариант, можно использовать headless chrome:
+
+    mkdir html
+    export YEAR=2019
+    
+    chromium --headless --disable-gpu --dump-dom "https://www.superjob.ru/proizvodstvennyj_kalendar/$YEAR" > "html/superjob$YEAR.html"
+    chromium --headless --disable-gpu --dump-dom "https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$YEAR/" > "html/consultant$YEAR.html"
+
+
+Запуск парсера superjob:
+
+    ./gradlew runSuperjob --args="--input $PWD/html/superjob2019.html --output $PWD/json/superjob2019.json"
+
+Запуск парсера consultant:
+
+    ./gradlew runConsultant --args="--input $PWD/html/consultant2019.html --output $PWD/json/consultant2019.json"

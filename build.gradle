@@ -1,3 +1,25 @@
+apply plugin: 'groovy'
+apply plugin: 'application'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:2.5.0"
+    compile "org.jsoup:jsoup:1.11.3"
+}
+
+task runSuperjob(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = 'ru.d10xa.holidays.Superjob'
+}
+
+task runConsultant(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = 'ru.d10xa.holidays.Consultant'
+}
+
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 

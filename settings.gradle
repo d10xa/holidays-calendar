@@ -1,3 +1,1 @@
 rootProject.name = "holidays-calendar"
-include ":parser-superjob"
-include ":parser-consultant"
