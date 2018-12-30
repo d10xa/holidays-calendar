@@ -78,8 +78,16 @@ downloadCalendar.doLast {
 
 Запуск парсера superjob:
 
-    ./gradlew runSuperjob --args="--input $PWD/html/superjob2019.html --output $PWD/json/superjob2019.json"
+    export YEAR=2019
+    ./gradlew runSuperjob --args="--input $PWD/html/superjob$YEAR.html --output $PWD/json/superjob$YEAR.json"
 
 Запуск парсера consultant:
 
-    ./gradlew runConsultant --args="--input $PWD/html/consultant2019.html --output $PWD/json/consultant2019.json"
+    export YEAR=2019
+    ./gradlew runConsultant --args="--input $PWD/html/consultant$YEAR.html --output $PWD/json/consultant$YEAR.json"
+
+
+Объединение в общий файл calendar.json
+
+    ./gradlew mergeJson
+
