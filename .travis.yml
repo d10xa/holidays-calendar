@@ -17,7 +17,7 @@ before_script:
         wget -qO- https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz | tar xvz -C $HOME/geckodriver
         export GECKODRIVER_PATH=$HOME/geckodriver/geckodriver
 script:
-    - gradle test
+    - ./gradlew test
 notifications:
     email:
         recipients:
