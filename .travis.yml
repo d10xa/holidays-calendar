@@ -1,0 +1,26 @@
+language: java
+env:
+    - MOZ_HEADLESS=1
+addons:
+    firefox: latest
+before_cache:
+    - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+    - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+    directories:
+        - $HOME/geckodriver/geckodriver
+        - $HOME/.gradle/caches/
+        - $HOME/.gradle/wrapper/
+before_script:
+    - |
+        mkdir $HOME/geckodriver
+        wget -qO- https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz | tar xvz -C $HOME/geckodriver
+        export GECKODRIVER_PATH=$HOME/geckodriver/geckodriver
+script:
+    - gradle test
+notifications:
+    email:
+        recipients:
+            - d10xa@mail.ru
+        on_success: never
+        on_failure: always

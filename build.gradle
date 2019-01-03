@@ -6,7 +6,7 @@ repositories {
 }
 
 dependencies {
-    compile "org.codehaus.groovy:groovy-all:2.5.0"
+    compile "org.codehaus.groovy:groovy-all:2.5.5"
     compile "org.jsoup:jsoup:1.11.3"
 }
 

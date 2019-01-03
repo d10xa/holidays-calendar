@@ -1,3 +1,5 @@
 /.idea
 /phantomjs
 /.gradle
+/html
+*.iml

@@ -48,8 +48,8 @@ class Consultant {
         run(new File(input), new File(output))
     }
 
-    static void run(File input, File output) {
-        Document parsed = Jsoup.parse(input.text)
+    static String html2json(String html) {
+        Document parsed = Jsoup.parse(html)
         int year = extractYear(parsed)
         int currentYear = Year.now().getValue()
         assert year >= 2013
@@ -75,8 +75,11 @@ class Consultant {
             "holidays" : holidays.collect { it.toString() },
             "preholidays": preholidays.collect { it.toString() }
         ])
-        String prettyJson = JsonOutput.prettyPrint(json)
-        output.text = prettyJson
+        JsonOutput.prettyPrint(json)
+    }
+
+    static void run(File input, File output) {
+        output.text = html2json(input.text)
     }
 
 }
