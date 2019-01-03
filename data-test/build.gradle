@@ -1,0 +1,15 @@
+apply plugin: "groovy"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile rootProject
+    compile "org.codehaus.groovy:groovy-all:2.5.5"
+    compile "org.jsoup:jsoup:1.11.3"
+    compile "org.seleniumhq.selenium:selenium-api:3.141.59"
+    compile "org.seleniumhq.selenium:selenium-remote-driver:3.141.59"
+    compile "org.seleniumhq.selenium:selenium-server:3.141.59"
+    testCompile "org.spockframework:spock-core:1.2-groovy-2.5"
+}

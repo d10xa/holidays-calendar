@@ -48,8 +48,8 @@ class Superjob {
         run(new File(input), new File(output))
     }
 
-    static void run(File input, File output) {
-        Document parsed = Jsoup.parse(input.text)
+    static String html2json(String html) {
+        Document parsed = Jsoup.parse(html)
         Elements holidaysElements =
             parsed.select("div.MonthsList_holiday:not(.m_outholiday):not(.m_outshortday):not(.h_color_gray)")
         assert holidaysElements.size() > 100
@@ -69,8 +69,11 @@ class Superjob {
             "holidays"   : holidays.collect { it.toString() },
             "preholidays": preholidays.collect { it.toString() }
         ])
-        String prettyJson = JsonOutput.prettyPrint(json)
-        output.text = prettyJson
+        JsonOutput.prettyPrint(json)
+    }
+
+    static void run(File input, File output) {
+        output.text = html2json(input.text)
     }
 
 }

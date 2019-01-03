@@ -1,0 +1,63 @@
+package ru.d10xa.holidays
+
+import groovy.json.JsonSlurper
+import ru.d10xa.holidays.testutil.BrowserWrapper
+import spock.lang.Specification
+
+class UpToDateSpec extends Specification {
+
+    def 'extractMaxYear test'(){
+
+        when:
+        def json = new JsonSlurper().parseText("""
+{
+    "holidays": [
+        "2011-01-01",
+        "2011-01-02",
+        "2011-01-03",
+        "2019-12-28",
+        "2019-12-29"
+    ]
+}
+""".trim())
+
+        then:
+        extractMaxYear(json) == 2019
+    }
+
+    def 'is up-to-date with consultant.ru'(){
+        when:
+        def f = getCalendarFile()
+        def json = new JsonSlurper().parseText(f.text)
+        def maxYear = extractMaxYear(json)
+
+        def holidays = json['holidays'].findAll { it.startsWith("$maxYear-") }
+        def preholidays = json['preholidays'].findAll { it.startsWith("$maxYear-") }
+
+        def html = new BrowserWrapper()
+            .getAndQuit("https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$maxYear/")
+
+        def newJsonStr = Consultant.html2json(html)
+        def newJson = new JsonSlurper().parseText(newJsonStr)
+
+        then:
+        holidays == newJson['holidays']
+        preholidays == newJson['preholidays']
+    }
+
+    Integer extractMaxYear(Object json) {
+        json['holidays']
+            .collect { it.takeWhile { it.isNumber() } }
+            .collect { Integer.valueOf(it) }
+            .max()
+    }
+
+    File getCalendarFile() {
+        def f = new File("json/calendar.json")
+
+        if (!f.exists()) { // For IDE execution
+            f = new File("../json/calendar.json")
+        }
+        f
+    }
+}
