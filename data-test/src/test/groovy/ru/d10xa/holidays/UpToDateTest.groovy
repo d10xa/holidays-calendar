@@ -1,14 +1,16 @@
 package ru.d10xa.holidays
 
 import groovy.json.JsonSlurper
+import org.junit.Test
 import ru.d10xa.holidays.testutil.BrowserWrapper
-import spock.lang.Specification
 
-class UpToDateSpec extends Specification {
+import static org.junit.Assert.assertEquals
 
-    def 'extractMaxYear test'(){
+class UpToDateTest {
 
-        when:
+    @Test
+    void extractMaxYearTest() {
+
         def json = new JsonSlurper().parseText("""
 {
     "holidays": [
@@ -20,13 +22,11 @@ class UpToDateSpec extends Specification {
     ]
 }
 """.trim())
-
-        then:
-        extractMaxYear(json) == 2019
+        assertEquals(extractMaxYear(json), 2019)
     }
 
-    def 'is up-to-date with consultant.ru'(){
-        when:
+    @Test
+    void isUpToDateWithConsultantRu() {
         def f = getCalendarFile()
         def json = new JsonSlurper().parseText(f.text)
         def maxYear = extractMaxYear(json)
@@ -40,9 +40,8 @@ class UpToDateSpec extends Specification {
         def newJsonStr = Consultant.html2json(html)
         def newJson = new JsonSlurper().parseText(newJsonStr)
 
-        then:
-        holidays == newJson['holidays']
-        preholidays == newJson['preholidays']
+        assertEquals(holidays, newJson['holidays'])
+        assertEquals(preholidays, newJson['preholidays'])
     }
 
     Integer extractMaxYear(Object json) {
