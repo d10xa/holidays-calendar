@@ -65,16 +65,20 @@ class Consultant {
 
         def holidays = extractDates("td.weekend")
         def preholidays = extractDates("td.preholiday")
+        def nowork2020 = year == 2020 ? extractDates("td.nowork") : []
 
         assert holidays.size() > 100
         assert holidays.size() < 140
         assert preholidays.size() > 1
         assert preholidays.size() < 20
+        assert nowork2020.size() == 28 && year == 2020 || nowork2020.size() == 0 && year != 2020
+
+        def nowork2020Map = year == 2020 ? ["nowork2020": nowork2020.collect { it.toString() }] : [:]
 
         String json = JsonOutput.toJson([
             "holidays" : holidays.collect { it.toString() },
             "preholidays": preholidays.collect { it.toString() }
-        ])
+        ] + nowork2020Map)
         JsonOutput.prettyPrint(json)
     }
 

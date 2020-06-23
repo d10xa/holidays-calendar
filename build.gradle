@@ -33,16 +33,17 @@ class MergeHolidaysJsonTask extends DefaultTask {
     @OutputFile
     File output
 
-    String exclude = ""
+    Set<String> exclude = []
 
     @TaskAction
     def action() {
         TreeSet<LocalDate> holidays = new TreeSet()
         TreeSet<LocalDate> preholidays = new TreeSet()
+        TreeSet<LocalDate> nowork2020 = new TreeSet()
 
         inputDir
             .listFiles()
-            .findAll { File f -> f.name != exclude}
+            .findAll { File f -> !exclude.contains(f.name) }
             .findAll { File f -> f.name.toLowerCase().endsWith(".json")}
             .collect { new JsonSlurper().parse(it) }
             .each {
@@ -52,11 +53,16 @@ class MergeHolidaysJsonTask extends DefaultTask {
                 it['preholidays']
                     .collect { String str -> LocalDate.parse(str) }
                     .each { preholidays.add(it as LocalDate) }
+                it['nowork2020']
+                    .collect { String str -> LocalDate.parse(str) }
+                    .each { nowork2020.add(it as LocalDate) }
+
         }
         def json = JsonOutput.toJson(
             [
                 'holidays'   : holidays.collect { it.toString() },
-                'preholidays': preholidays.collect { it.toString() }
+                'preholidays': preholidays.collect { it.toString() },
+                'nowork2020': nowork2020.collect { it.toString() }
             ]
         )
         output.text = JsonOutput.prettyPrint(json)
@@ -65,7 +71,7 @@ class MergeHolidaysJsonTask extends DefaultTask {
 
 task mergeJson(type: MergeHolidaysJsonTask) {
     inputDir = file("json")
-    exclude = "calendar.json"
+    exclude = ["calendar.json", "superjob2020.json"]
     output = file("json/calendar.json")
 }
 
