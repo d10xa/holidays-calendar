@@ -63,9 +63,14 @@ class Consultant {
             }
         }
 
-        def holidays = extractDates("td.weekend")
+        // 2020-07-01 Голосование по вопросу одобрения изменений в Конституцию Российской Федерации
+        def date20200701 = LocalDate.parse("2020-07-01")
+        def listWithOptionalDate20200701 = year == 2020 ? [date20200701] : []
+
+        def holidays = (extractDates("td.weekend") + listWithOptionalDate20200701).sort()
         def preholidays = extractDates("td.preholiday")
-        def nowork2020 = year == 2020 ? extractDates("td.nowork") : []
+
+        def nowork2020 = year == 2020 ? extractDates("td.nowork") - date20200701 : []
 
         assert holidays.size() > 100
         assert holidays.size() < 140
