@@ -34,6 +34,7 @@
 [2018](json/superjob2018.json) 
 [2019](json/superjob2019.json) 
 [2020](json/superjob2020.json) 
+[2021](json/superjob2021.json) 
 
 ## consultant
 
@@ -47,6 +48,7 @@
 [2018](json/consultant2018.json)
 [2019](json/consultant2019.json)
 [2020](json/consultant2020.json)
+[2021](json/consultant2021.json)
 
 ## json structure
 
