@@ -1,8 +1,8 @@
 # Производственный Календарь .json
 
-[ ![Travis](https://img.shields.io/travis/d10xa/holidays-calendar.svg)](https://travis-ci.org/d10xa/holidays-calendar)
+[ ![Travis](https://img.shields.io/travis/d10xa/holidays-calendar.svg)](https://travis-ci.com/d10xa/holidays-calendar)
 
-[CRON](https://travis-ci.org/d10xa/holidays-calendar/builds). Календарь ежедневно сверяется с consultant.ru.
+[CRON](https://travis-ci.com/d10xa/holidays-calendar/builds). Календарь ежедневно сверяется с consultant.ru.
 
 Для отслеживания изменений, можно нажать кнопку Watch. Кнопка Star даст мне знать, что репозиторий кому-то интересен и 
 есть смысл его обновлять каждый год.
