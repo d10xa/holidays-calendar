@@ -33,6 +33,7 @@ class UpToDateTest {
 
         def holidays = json['holidays'].findAll { it.startsWith("$maxYear-") }
         def preholidays = json['preholidays'].findAll { it.startsWith("$maxYear-") }
+        def nowork = (json['nowork'] ?: []).findAll { it.startsWith("$maxYear-") }
 
         def html = new BrowserWrapper()
             .getAndQuit("https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$maxYear/")
@@ -42,6 +43,7 @@ class UpToDateTest {
 
         assertEquals(holidays, newJson['holidays'])
         assertEquals(preholidays, newJson['preholidays'])
+        assertEquals(nowork, newJson['nowork'])
     }
 
     Integer extractMaxYear(Object json) {

@@ -39,7 +39,7 @@ class MergeHolidaysJsonTask extends DefaultTask {
     def action() {
         TreeSet<LocalDate> holidays = new TreeSet()
         TreeSet<LocalDate> preholidays = new TreeSet()
-        TreeSet<LocalDate> nowork2020 = new TreeSet()
+        TreeSet<LocalDate> nowork = new TreeSet()
 
         inputDir
             .listFiles()
@@ -53,16 +53,16 @@ class MergeHolidaysJsonTask extends DefaultTask {
                 it['preholidays']
                     .collect { String str -> LocalDate.parse(str) }
                     .each { preholidays.add(it as LocalDate) }
-                it['nowork2020']
+                it['nowork']
                     .collect { String str -> LocalDate.parse(str) }
-                    .each { nowork2020.add(it as LocalDate) }
+                    .each { nowork.add(it as LocalDate) }
 
         }
         def json = JsonOutput.toJson(
             [
                 'holidays'   : holidays.collect { it.toString() },
                 'preholidays': preholidays.collect { it.toString() },
-                'nowork2020': nowork2020.collect { it.toString() }
+                'nowork': nowork.collect { it.toString() }
             ]
         )
         output.text = JsonOutput.prettyPrint(json)
