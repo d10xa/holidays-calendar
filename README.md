@@ -115,8 +115,8 @@ downloadCalendar.doLast {
     mkdir html
     export YEAR=2019
     
-    chromium --headless --disable-gpu --dump-dom "https://www.superjob.ru/proizvodstvennyj_kalendar/$YEAR" > "html/superjob$YEAR.html"
-    chromium --headless --disable-gpu --dump-dom "https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$YEAR/" > "html/consultant$YEAR.html"
+    google-chrome --headless --disable-gpu --crash-dumps-dir=/tmp --dump-dom "https://www.superjob.ru/proizvodstvennyj_kalendar/$YEAR" > "html/superjob$YEAR.html"
+    google-chrome --headless --disable-gpu --crash-dumps-dir=/tmp --dump-dom "https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$YEAR/" > "html/consultant$YEAR.html"
 
 
 Запуск парсера superjob:
