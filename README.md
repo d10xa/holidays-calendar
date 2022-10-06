@@ -1,9 +1,5 @@
 # Производственный Календарь .json
 
-[ ![Travis](https://img.shields.io/travis/d10xa/holidays-calendar.svg)](https://travis-ci.com/d10xa/holidays-calendar)
-
-[CRON](https://travis-ci.com/d10xa/holidays-calendar/builds). Календарь ежедневно сверяется с consultant.ru.
-
 Для отслеживания изменений, можно нажать кнопку Watch. Кнопка Star даст мне знать, что репозиторий кому-то интересен и 
 есть смысл его обновлять каждый год.
 
@@ -25,6 +21,7 @@
 [2020](json/superjob2020.json) 
 [2021](json/superjob2021.json) 
 [2022](json/superjob2022.json) 
+[2023](json/superjob2023.json) 
 
 ## consultant
 
@@ -40,6 +37,7 @@
 [2020](json/consultant2020.json)
 [2021](json/consultant2021.json)
 [2022](json/consultant2022.json)
+[2023](json/consultant2023.json)
 
 ## json structure
 
@@ -107,13 +105,13 @@ downloadCalendar.doLast {
 
 Исходный код страниц можно взять из браузера. Пример прямых ссылок для chrome:
 
-    view-source:https://www.superjob.ru/proizvodstvennyj_kalendar/2019/
-    view-source:https://www.consultant.ru/law/ref/calendar/proizvodstvennye/2019/
+    view-source:https://www.superjob.ru/proizvodstvennyj_kalendar/2023/
+    view-source:https://www.consultant.ru/law/ref/calendar/proizvodstvennye/2023/
 
 Как альтернативный вариант, можно использовать headless chrome:
 
     mkdir html
-    export YEAR=2019
+    export YEAR=2023
     
     google-chrome --headless --disable-gpu --crash-dumps-dir=/tmp --dump-dom "https://www.superjob.ru/proizvodstvennyj_kalendar/$YEAR" > "html/superjob$YEAR.html"
     google-chrome --headless --disable-gpu --crash-dumps-dir=/tmp --dump-dom "https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$YEAR/" > "html/consultant$YEAR.html"
@@ -121,12 +119,12 @@ downloadCalendar.doLast {
 
 Запуск парсера superjob:
 
-    export YEAR=2019
+    export YEAR=2023
     ./gradlew runSuperjob --args="--input $PWD/html/superjob$YEAR.html --output $PWD/json/superjob$YEAR.json"
 
 Запуск парсера consultant:
 
-    export YEAR=2019
+    export YEAR=2023
     ./gradlew runConsultant --args="--input $PWD/html/consultant$YEAR.html --output $PWD/json/consultant$YEAR.json"
 
 
