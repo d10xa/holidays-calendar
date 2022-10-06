@@ -48,12 +48,16 @@ class Consultant {
         run(new File(input), new File(output))
     }
 
-    static String html2json(String html) {
-        Document parsed = Jsoup.parse(html)
-        int year = extractYear(parsed)
+    static void assertYear(int year) {
         int currentYear = Year.now().getValue()
         assert year >= 2013
         assert year <= currentYear + 1
+    }
+
+    static String html2json(String html) {
+        Document parsed = Jsoup.parse(html)
+        int year = extractYear(parsed)
+        assertYear(year)
 
         Element content = parsed.selectFirst("#content")
         Closure<List<LocalDate>> extractDates = { String selector ->
