@@ -5,13 +5,12 @@ import groovy.json.JsonOutput
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import org.jsoup.select.Elements
 
 import java.time.LocalDate
 
 class Superjob {
 
-    final static def MONTHS = [
+    final static ArrayList<String> MONTHS = [
         "Январь",
         "Февраль",
         "Март",
@@ -25,14 +24,6 @@ class Superjob {
         "Ноябрь",
         "Декабрь"
     ]
-
-    static int extractMonth(Element element) {
-        MONTHS.indexOf(element.parent().parent().previousElementSibling().text()) + 1
-    }
-
-    static int extractDay(Element element) {
-        Integer.valueOf(element.select("div.MonthsList_day").text())
-    }
 
     static int extractYear(Element root) {
         Integer.parseInt(root.select("title").text().find("\\d{4}"))
@@ -48,23 +39,57 @@ class Superjob {
         run(new File(input), new File(output))
     }
 
+    static <A> A headAssert(Collection<A> c) {
+        assert c.size() == 1
+        c.head()
+    }
+
+    static List<List<LocalDate>> daysMap(Element el, int monthIndex, int year) {
+        el.select("span")
+            .findAll { it.text() == MONTHS[monthIndex] }
+            .head().parent().nextElementSibling()
+            .select("span")
+            .findAll { it.html().isNumber() }
+            .dropWhile { it.html().toInteger() != 1 }
+            .reverse()
+            .dropWhile { it.html().toInteger() < 10 }
+            .reverse()
+            .groupBy { it.parent().parent().parent().attr("class") }
+            .values()
+            .collect { it.collect(e -> e.text().toInteger()) }
+            .sort { it.size() }
+            .collect { lists ->
+                lists.collect { day ->
+                    LocalDate.of(year, monthIndex + 1, day)
+                }
+            }
+            .reverse()
+    }
+
     static String html2json(String html) {
         Document parsed = Jsoup.parse(html)
-        Elements holidaysElements =
-            parsed.select("div.MonthsList_holiday:not(.m_outholiday):not(.m_outshortday):not(.h_color_gray)")
-        assert holidaysElements.size() > 100
-        assert holidaysElements.size() < 140
+        def year = extractYear(parsed)
+        List<List<List<LocalDate>>> groupedByMonth =
+            MONTHS.indices.collect { daysMap(parsed, it, year) }
+        List<Tuple2<List<LocalDate>, List<LocalDate>>> groupedAsTuples =
+            groupedByMonth.collect {
+                it ->
+                    switch (it.size()) {
+                        case 2:
+                            return new Tuple2(it[1], [] as List<LocalDate>)
+                        case 3:
+                            return new Tuple2(it[1], it[2])
+                        default:
+                            throw new IllegalArgumentException(it.toString())
+                    }
+            }
 
-        Elements preholidaysElements =
-            parsed.select("div.MonthsList_preholiday:not(.m_outholiday):not(.m_outshortday):not(.h_color_gray)")
-        assert preholidaysElements.size() > 1
-        assert preholidaysElements.size() < 20
-
-        int year = extractYear(parsed)
-
-        def holidays = holidaysElements.collect { e -> LocalDate.of(year, extractMonth(e), extractDay(e)) }
-        def preholidays = preholidaysElements.collect { e -> LocalDate.of(year, extractMonth(e), extractDay(e)) }
-
+        List<LocalDate> holidays = groupedAsTuples
+            .collect { it[0] }.flatten()
+        List<LocalDate> preholidays = groupedAsTuples
+            .collect { it[1] }.flatten()
+        assert holidays.size() > 100
+        assert preholidays.size() < 8
         String json = JsonOutput.toJson([
             "holidays"   : holidays.collect { it.toString() },
             "preholidays": preholidays.collect { it.toString() }
