@@ -2,7 +2,6 @@ package ru.d10xa.holidays
 
 import groovy.json.JsonSlurper
 import org.junit.Test
-import ru.d10xa.holidays.testutil.BrowserWrapper
 
 import static org.junit.Assert.assertEquals
 
@@ -35,15 +34,14 @@ class UpToDateTest {
         def preholidays = json['preholidays'].findAll { it.startsWith("$maxYear-") }
         def nowork = (json['nowork'] ?: []).findAll { it.startsWith("$maxYear-") }
 
-        def html = new BrowserWrapper()
-            .getAndQuit("https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$maxYear/")
+        def html = "https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$maxYear/".toURL().text
 
         def newJsonStr = Consultant.html2json(html)
         def newJson = new JsonSlurper().parseText(newJsonStr)
 
         assertEquals(holidays, newJson['holidays'])
         assertEquals(preholidays, newJson['preholidays'])
-        assertEquals(nowork, newJson['nowork'])
+        assertEquals(nowork, newJson['nowork'] ?: [])
     }
 
     Integer extractMaxYear(Object json) {
