@@ -1,12 +1,12 @@
 apply plugin: "groovy"
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    compile rootProject
-    compile "org.codehaus.groovy:groovy-all:3.0.2"
-    compile "org.jsoup:jsoup:1.13.1"
+    implementation rootProject
+    implementation "org.codehaus.groovy:groovy-all:3.0.2"
+    implementation "org.jsoup:jsoup:1.13.1"
     testImplementation "junit:junit:4.13"
 }
