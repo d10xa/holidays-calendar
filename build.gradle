@@ -33,6 +33,7 @@ class MergeHolidaysJsonTask extends DefaultTask {
     @OutputFile
     File output
 
+    @Input
     Set<String> exclude = []
 
     @TaskAction
