@@ -40,6 +40,7 @@
 [2022](json/consultant2022.json)
 [2023](json/consultant2023.json)
 [2024](json/consultant2024.json)
+[2025](json/consultant2025.json)
 
 ## json structure
 
