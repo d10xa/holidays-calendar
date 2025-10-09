@@ -114,21 +114,20 @@ downloadCalendar.doLast {
 Как альтернативный вариант, можно использовать headless chrome:
 
     mkdir html
-    mkdir html
 
-    export YEAR=2024
-    google-chrome --headless --disable-gpu --crash-dumps-dir=/tmp --dump-dom "https://www.superjob.ru/proizvodstvennyj_kalendar/$YEAR" > "html/superjob$YEAR.html"
-    google-chrome --headless --disable-gpu --crash-dumps-dir=/tmp --dump-dom "https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$YEAR/" > "html/consultant$YEAR.html"
+    export YEAR=2025
+    google-chrome --headless --disable-gpu --no-sandbox --disable-dev-shm-usage --crash-dumps-dir=/tmp --dump-dom "https://www.superjob.ru/proizvodstvennyj_kalendar/$YEAR" > "html/superjob$YEAR.html" 2>/dev/null
+    google-chrome --headless --disable-gpu --no-sandbox --disable-dev-shm-usage --crash-dumps-dir=/tmp --dump-dom "https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$YEAR/" > "html/consultant$YEAR.html" 2>/dev/null
 
 
 Запуск парсера superjob:
 
-    export YEAR=2024
+    export YEAR=2025
     ./gradlew runSuperjob --args="--input $PWD/html/superjob$YEAR.html --output $PWD/json/superjob$YEAR.json"
 
 Запуск парсера consultant:
 
-    export YEAR=2024
+    export YEAR=2025
     ./gradlew runConsultant --args="--input $PWD/html/consultant$YEAR.html --output $PWD/json/consultant$YEAR.json"
 
 
