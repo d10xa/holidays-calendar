@@ -41,6 +41,7 @@
 [2023](json/consultant2023.json)
 [2024](json/consultant2024.json)
 [2025](json/consultant2025.json)
+[2026](json/consultant2026.json)
 
 ## json structure
 
@@ -108,26 +109,26 @@ downloadCalendar.doLast {
 
 Исходный код страниц можно взять из браузера. Пример прямых ссылок для chrome:
 
-    view-source:https://www.superjob.ru/proizvodstvennyj_kalendar/2024/
-    view-source:https://www.consultant.ru/law/ref/calendar/proizvodstvennye/2024/
+    view-source:https://www.superjob.ru/proizvodstvennyj_kalendar/2026/
+    view-source:https://www.consultant.ru/law/ref/calendar/proizvodstvennye/2026/
 
 Как альтернативный вариант, можно использовать headless chrome:
 
     mkdir html
 
-    export YEAR=2025
+    export YEAR=2026
     google-chrome --headless --disable-gpu --no-sandbox --disable-dev-shm-usage --crash-dumps-dir=/tmp --dump-dom "https://www.superjob.ru/proizvodstvennyj_kalendar/$YEAR" > "html/superjob$YEAR.html" 2>/dev/null
     google-chrome --headless --disable-gpu --no-sandbox --disable-dev-shm-usage --crash-dumps-dir=/tmp --dump-dom "https://www.consultant.ru/law/ref/calendar/proizvodstvennye/$YEAR/" > "html/consultant$YEAR.html" 2>/dev/null
 
 
 Запуск парсера superjob:
 
-    export YEAR=2025
+    export YEAR=2026
     ./gradlew runSuperjob --args="--input $PWD/html/superjob$YEAR.html --output $PWD/json/superjob$YEAR.json"
 
 Запуск парсера consultant:
 
-    export YEAR=2025
+    export YEAR=2026
     ./gradlew runConsultant --args="--input $PWD/html/consultant$YEAR.html --output $PWD/json/consultant$YEAR.json"
 
 
