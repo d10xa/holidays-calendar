@@ -8,5 +8,46 @@ dependencies {
     implementation rootProject
     implementation "org.codehaus.groovy:groovy-all:3.0.2"
     implementation "org.jsoup:jsoup:1.13.1"
-    testImplementation "junit:junit:4.13"
+
+    // JUnit 5 (Jupiter)
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+sourceSets {
+    integrationTest {
+        groovy {
+            srcDir 'src/integrationTest/groovy'
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom implementation
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs integration tests that compare HTML parsing against expected JSON'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    useJUnitPlatform()
+    shouldRunAfter test
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = false
+        exceptionFormat = "full"
+    }
 }

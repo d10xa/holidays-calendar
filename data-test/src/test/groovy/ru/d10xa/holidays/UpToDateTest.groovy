@@ -1,9 +1,9 @@
 package ru.d10xa.holidays
 
 import groovy.json.JsonSlurper
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-import static org.junit.Assert.assertEquals
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 class UpToDateTest {
 
