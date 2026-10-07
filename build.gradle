@@ -6,7 +6,7 @@ repositories {
 }
 
 dependencies {
-    implementation "org.codehaus.groovy:groovy-all:3.0.2"
+    implementation "org.codehaus.groovy:groovy-all:3.0.25"
     implementation "org.jsoup:jsoup:1.13.1"
 }
 

@@ -17,7 +17,7 @@ jobs:
             -   uses: actions/setup-java@v6
                 with:
                     distribution: temurin
-                    java-version: 11
+                    java-version: 17
             -   uses: gradle/actions/setup-gradle@v6
             -   name: Update calendar from consultant.ru
                 run: bash .github/scripts/update_consultant.sh
