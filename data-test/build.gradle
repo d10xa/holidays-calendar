@@ -5,8 +5,8 @@ repositories {
 }
 
 dependencies {
-    implementation rootProject
-    implementation "org.codehaus.groovy:groovy-all:3.0.2"
+    implementation project(':')
+    implementation "org.codehaus.groovy:groovy-all:3.0.25"
     implementation "org.jsoup:jsoup:1.13.1"
 
     // JUnit 5 (Jupiter)

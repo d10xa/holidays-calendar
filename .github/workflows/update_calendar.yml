@@ -1,0 +1,44 @@
+name: update_calendar
+
+on:
+    schedule:
+        -   cron: '0 3 * * 1' # “At 03:00 on Monday.”
+    workflow_dispatch:
+
+permissions:
+    contents: write
+    actions: write
+
+jobs:
+    update:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v7
+            -   uses: actions/setup-java@v6
+                with:
+                    distribution: temurin
+                    java-version: 17
+            -   uses: gradle/actions/setup-gradle@v6
+            -   name: Update calendar from consultant.ru
+                run: bash .github/scripts/update_consultant.sh
+            -   name: Commit changes
+                run: |
+                    git add json README.md
+                    if git diff --cached --quiet; then
+                        echo "Календарь не изменился"
+                        exit 0
+                    fi
+                    git config user.name "github-actions[bot]"
+                    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                    git commit -m "Обновление календаря с consultant.ru"
+                    git push
+
+    # GitHub отключает расписание, если в репозитории 60 дней не было активности.
+    # Повторное включение workflow через API сбрасывает этот счётчик.
+    keepalive:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Keep scheduled workflow enabled
+                env:
+                    GH_TOKEN: ${{ github.token }}
+                run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/update_calendar.yml/enable"
